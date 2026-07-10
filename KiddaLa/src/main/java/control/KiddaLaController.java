@@ -13,7 +13,7 @@ import model.Customer;
 import model.OrderControlUtility;
 import action.CustomerSearchAction;
 
-@WebServlet("/KiddalaController")
+@WebServlet("/KiddaLaController")
 public class KiddaLaController extends HttpServlet {
 //	Getリクエストに対応する、doPostメソッドを呼び出す
 	@Override
@@ -31,11 +31,13 @@ public class KiddaLaController extends HttpServlet {
 		try {
             //	コマンドがnullと等しいか""と等しい場合は「メインメニュー」画面に遷移する
 			if (command == null || command.equals("")) {
-				rd = request.getRequestDispatcher("/WEB-INF/jsp/mainMenu.jsp");
+				rd = request.getRequestDispatcher("/MainMenu.jsp");
 				rd.forward(request, response);
             //	CommandがCustomerSearchDisplayの場合、顧客情報検索画面に遷移する
 			} else if (command.equals("CustomerSearchDisplay")){
-				rd = request.getRequestDispatcher("/WEB-INF/jsp/customerSearch.jsp");
+				HttpSession session = request.getSession();
+			    session.removeAttribute("tableData");   // 前回の検索結果をクリア
+				rd = request.getRequestDispatcher("/CustomerSearch.jsp");
 				rd.forward(request, response);
             //	Commandが"CustomerSearch"と等しい場合は，顧客情報検索アクションを実行して「顧客情報検索」画面に遷移する。
 			} else if (command.equals("CustomerSearch")){
@@ -43,17 +45,71 @@ public class KiddaLaController extends HttpServlet {
 				data[0] = request.getParameter("tel");
 				data[1] = request.getParameter("kana");
 				
-				CustomerSearchAction action = new CustomerSearchAction();
-				String[][] tableData = action.execute(data);
 				HttpSession session = request.getSession();
-				session.setAttribute("tableData", tableData);
 				
-				rd = request.getRequestDispatcher("/WEB-INF/jsp/customerSearch.jsp");
-				rd.forward(request, response);	
+				try {
+					CustomerSearchAction action = new CustomerSearchAction();
+			        String[][] tableData = action.execute(data);
+
+			        if (tableData == null) {
+			            // 012：該当する顧客情報が0件
+			            request.setAttribute("errorCode", "012");
+			            request.setAttribute("errorMessage", "一致する情報は見つかりませんでした。");
+			            session.removeAttribute("tableData");
+			        } else {
+			            session.setAttribute("tableData", tableData);
+			        }
+
+			        rd = request.getRequestDispatcher("/CustomerSearch.jsp");
+			        rd.forward(request, response);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+			        String msg = e.getMessage();
+			        
+			        if (msg != null && msg.contains("いずれか、または両方")) {
+			            // 011：入力不足 → 検索画面にとどまる
+			            request.setAttribute("errorCode", "011");
+			            request.setAttribute("errorMessage", msg);
+			            rd = request.getRequestDispatcher("/CustomerSearch.jsp");
+			            rd.forward(request, response);
+
+			        } else if (msg != null && msg.contains("DB接続処理")){
+			        	// 010：DB接続失敗 → 共通エラー画面へ
+			            request.setAttribute("errorCode", "010");
+			            request.setAttribute("errorMessage", msg);
+			            rd = request.getRequestDispatcher("/Error.jsp");
+			            rd.forward(request, response);
+			        } else {
+			        	// 013：それ以外の検索処理失敗 → 検索画面にとどまる
+			            request.setAttribute("errorCode", "013");
+			            request.setAttribute("errorMessage", "顧客情報検索処理に失敗しました！管理者に連絡してください。");
+			            rd = request.getRequestDispatcher("/CustomerSearch.jsp");
+			            rd.forward(request, response);
+			        }
+				}
 			}
 		} catch (Exception e){
-			request.setAttribute("errorMessage", e.getMessage());
-			rd = request.getRequestDispatcher("/WEB-INF/jsp/error.jsp");
+			e.printStackTrace();
+
+		    String msg = e.getMessage();
+		    String errorCode;
+
+		    if (msg != null && msg.contains("DB接続処理")) {
+		        errorCode = "010";
+		    } else if (msg != null && msg.contains("いずれか、または両方")) {
+		        errorCode = "011";
+		    } else if (msg != null && msg.contains("一致する情報")) {
+		        errorCode = "012";
+		    } else if (msg != null && msg.contains("検索処理に失敗")) {
+		        errorCode = "013";
+		    } else {
+		        errorCode = "999";
+		    }
+		    
+		    request.setAttribute("errorCode", errorCode);
+		    request.setAttribute("errorMessage", msg);
+			rd = request.getRequestDispatcher("/Error.jsp");
 			rd.forward(request, response);	
 		}
 	}

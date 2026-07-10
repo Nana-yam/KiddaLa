@@ -25,7 +25,7 @@ public class OrderControlUtility extends Object {
 		int month = cal.get(Calendar.MONTH) + 1;
 		int day = cal.get(Calendar.DATE);
 		
-		return year + "-" + month + "-" + day;
+		return String.format("%04d-%02d-%02d", year, month, day);
 	}
 }
 
