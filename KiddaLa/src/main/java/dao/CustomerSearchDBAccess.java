@@ -10,9 +10,9 @@ import model.Customer;
 
 public class CustomerSearchDBAccess extends Object{
 	
-	private static final String URL = "jdbc:mysql://localhost:3306/KIDDA_LA?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Tokyo";
-	private static final String USER = "root";
-	private static final String PASSWORD = "Sqlnqyqm390";
+	private static final String URL = "jdbc:mysql://localhost:65534/KIDDA_LA";
+	private static final String USER = "user1";
+	private static final String PASSWORD = "pass1";
 	
 //	KIDDA_LAデータベースとの接続を確立する。
 	private Connection createConnection() throws Exception {
