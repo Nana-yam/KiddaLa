@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%!
+    private String esc(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+%>
 <%
     String[][] tableData = (String[][]) session.getAttribute("tableData");
 
@@ -7,7 +19,7 @@
     if (phoneValue == null) { phoneValue = ""; }
     String kanaValue = request.getParameter("kana");
     if (kanaValue == null) { kanaValue = ""; }
-    
+
     String errorCode = (String) request.getAttribute("errorCode");
     String errorMessage = (String) request.getAttribute("errorMessage");
 %>
@@ -16,7 +28,7 @@
 <head>
 <% if (errorCode != null) { %>
 <script>
-    alert("<%= errorMessage %>");
+    alert("<%= esc(errorMessage) %>");
 </script>
 <% } %>
 <meta charset="UTF-8">
@@ -46,12 +58,12 @@
                     <div class="field-label">電話番号（ハイフンなし）</div>
                     <input type="text" class="field-input" name="tel"
                            placeholder="例：09012345678"
-                           value="<%= phoneValue %>">
+                           value="<%= esc(phoneValue) %>">
 
                     <div class="field-label">氏名カナ（全角カタカナ）</div>
                     <input type="text" class="field-input" name="kana"
                            placeholder="例：ヤマダタロウ"
-                           value="<%= kanaValue %>">
+                           value="<%= esc(kanaValue) %>">
 
                     <div class="search-button-row">
                         <button type="submit" class="btn btn-search btn-block">検索</button>
@@ -83,11 +95,11 @@
                         <tbody>
                             <% for (int i = 0; i < tableData.length; i++) { %>
                                 <tr class="clickable-row"
-                                    onclick="document.location.href='KiddaLaController?command=OrderDisplay&id=<%= tableData[i][0] %>'">
-                                    <td><%= tableData[i][0] %></td>
-                                    <td class="name-cell"><%= tableData[i][1] %></td>
-                                    <td><%= tableData[i][2] %></td>
-                                    <td><%= tableData[i][4] %></td>
+                                    onclick="document.location.href='KiddaLaController?command=OrderDisplay&id=<%= esc(tableData[i][0]) %>'">
+                                    <td><%= esc(tableData[i][0]) %></td>
+                                    <td class="name-cell"><%= esc(tableData[i][1]) %></td>
+                                    <td><%= esc(tableData[i][2]) %></td>
+                                    <td><%= esc(tableData[i][4]) %></td>
                                 </tr>
                             <% } %>
                         </tbody>

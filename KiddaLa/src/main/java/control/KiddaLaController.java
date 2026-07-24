@@ -1,7 +1,7 @@
 package control;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Customer;
-import model.OrderControlUtility;
+
 import action.CustomerSearchAction;
 
 @WebServlet("/KiddaLaController")
 public class KiddaLaController extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	
 //	Getリクエストに対応する、doPostメソッドを呼び出す
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
@@ -88,6 +90,9 @@ public class KiddaLaController extends HttpServlet {
 			            rd.forward(request, response);
 			        }
 				}
+			}else {
+				rd = request.getRequestDispatcher("/MainMenu.jsp");
+				rd.forward(request, response);
 			}
 		} catch (Exception e){
 			e.printStackTrace();

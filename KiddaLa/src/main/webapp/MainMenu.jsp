@@ -44,7 +44,4 @@
         <p class="footer-credit">&copy;Infotech Serve Inc.</p>
     </div>
 </body>
-<script>
-    // 「閉じる」ボタン押下時にこのタブ/ウィンドウを閉じる
-</script>
 </html>

@@ -25,7 +25,7 @@ class CustomerSearchActionTest {
 	
 //	③kanaのみ入力
 	@Test
-	void testExecute_kanaOniy() throws Exception {
+	void testExecute_kanaOnly() throws Exception {
 		String[] data = {"", "イトウハナエ"};
 		String[][] result = action.execute(data);
 		assertEquals(2, result.length);

@@ -2,7 +2,10 @@ package model;
 
 import java.io.Serializable;
 
-public class Customer extends Object implements Serializable{
+public class Customer implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
 //  5つのprivate属性
 	private int custId;
 	private String custName;
@@ -23,7 +26,7 @@ public class Customer extends Object implements Serializable{
 		this.address = address;
 	}
 	
-//	getter/settetメソッド
+//	getter/setterメソッド
 	public int getCustId() {
 		return this.custId;
 	}

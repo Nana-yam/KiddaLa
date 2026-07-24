@@ -67,14 +67,14 @@ class CustomerSearchDBAccessTest {
     // 項番8【正常系】telのみ存在、kanaにnullを指定する
     @Test
     void test_telのみ指定の場合() throws Exception {
-        ArrayList<Customer> result = dbAccess.searchCustomer("09012345678", null);
+    	ArrayList<Customer> result = dbAccess.searchCustomer("09012345678", null);
         assertFalse(result.isEmpty());
     }
 
     // 項番9【正常系】telにnull、kanaのみ存在する値を指定する
     @Test
     void test_kanaのみ指定の場合() throws Exception {
-        ArrayList<Customer> result = dbAccess.searchCustomer(null, "アオキマユミ");
+    	ArrayList<Customer> result = dbAccess.searchCustomer(null, "アオキマユミ");
         assertFalse(result.isEmpty());
     }
     
@@ -84,4 +84,3 @@ class CustomerSearchDBAccessTest {
         assertThrows(Exception.class, () -> dbAccess.searchCustomer(null, null));
     }
 }
-

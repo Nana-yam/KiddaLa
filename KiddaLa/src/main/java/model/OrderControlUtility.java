@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class OrderControlUtility extends Object {
+public class OrderControlUtility {
 //	顧客情報リストを検索結果表示用データに変換する
 	public static String[][] customerToArray(ArrayList<Customer> list) {
 		String[][] tableData = new String[list.size()][5];
